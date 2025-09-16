@@ -5,7 +5,9 @@ test('registration test without page object', async ({ page }) => {
   await page.goto('http://localhost:5173/joinus'); // replace with actual join us page route
 
   // Fill Login Details
-  await page.locator('#email').fill('testuser@example.com');
+  const uniqueEmail = `testuser_${Date.now()}@example.com`;
+
+  await page.locator('#email').fill(uniqueEmail);
   await page.locator('#password').fill('Password123!');
 
   // Fill Personal Details
