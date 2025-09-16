@@ -4,6 +4,20 @@ const sqlite3 = require('sqlite3').verbose();
 const newsModel = require('./news/newsModel');
 const newsRoutes = require('./news/newsRoutes');
 require('dotenv').config();
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
+mongoose.set('strictQuery', true);
+mongoose.connect(process.env.MONGO_URI, { dbName: 'pyrmont' })
+  .then(() => console.log('✅ MongoDB connected'))
+  .catch(err => console.error('Mongo error:', err));
+
+const app = express();
+app.use(cors({ origin: 'http://localhost:5173' }));
+
+
 
 const app = express();
 
@@ -103,5 +117,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);
 });
+
 
 
