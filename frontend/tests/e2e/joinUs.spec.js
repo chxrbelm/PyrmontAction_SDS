@@ -25,11 +25,43 @@ test('registration test without page object', async ({ page }) => {
   // Submit the form
   await page.locator('#submitBtn').click();
 
+  // Wait for network call to backend (adjust URL if needed)
+  // const response = await page.waitForResponse(res =>
+  //   res.url().includes('/joinus') && res.status() === 200
+  // );
+
   // Assert successful redirect to login page
-  await expect(page).toHaveURL(/.*\/login/);
+  await expect(page).toHaveURL(/.*\/login/, { timeout: 10000 });
   // await page.goto('http://localhost:5173/login'); // replace with actual login page route
   // await expect(page.locator('#welcome-heading')).toHaveText('Welcome back');
 });
+
+test('password validation updates as user types', async ({ page }) => {
+  await page.goto('http://localhost:5173/joinus');
+
+  const passwordInput = page.locator('#password');
+
+  // Initially, all rules should be unfulfilled
+  await expect(page.locator('li:has-text("At least 10 characters")')).not.toHaveClass(/password-accept/);
+
+  // Type 10 characters
+  await passwordInput.fill('abcdefghij');
+  await expect(page.locator('li:has-text("At least 10 characters")')).toHaveClass(/password-accept/);
+  await expect(page.locator('li:has-text("At least one upper-case letter")')).not.toHaveClass(/password-accept/);
+
+  // Add uppercase letter
+  await passwordInput.fill('Abcdefghij');
+  await expect(page.locator('li:has-text("At least one upper-case letter")')).toHaveClass(/password-accept/);
+
+  // Add digit
+  await passwordInput.fill('Abcdefghij1');
+  await expect(page.locator('li:has-text("At least one digit")')).toHaveClass(/password-accept/);
+
+  // Add symbol
+  await passwordInput.fill('Abcdefghij1!');
+  await expect(page.locator('li:has-text("At least one symbol")')).toHaveClass(/password-accept/);
+});
+
 
 // http://localhost:5173/member
 // 
