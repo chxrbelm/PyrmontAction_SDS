@@ -62,6 +62,16 @@ test('password validation updates as user types', async ({ page }) => {
   await expect(page.locator('li:has-text("At least one symbol")')).toHaveClass(/password-accept/);
 });
 
+// Test 3: Check missing required fields flagged
+test('Join Us form should show errors for missing required fields', async ({ page }) => {
+  await page.goto('http://localhost:5173/joinUs');
+
+  await page.click('#submitBtn');
+
+  await expect(page.locator("#email + .error-message")).toHaveText("Email is required");
+  await expect(page.locator("#password + .error-message")).toHaveText("Password is required");
+  await expect(page.locator("#first-name + .error-message")).toHaveText("First name is required");
+});
 
 // http://localhost:5173/member
 // 
