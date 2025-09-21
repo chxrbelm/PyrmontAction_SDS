@@ -75,9 +75,9 @@
 
             signUpData.value.state = stateChosen.value;
             const response = await joinUsService.joinus(signUpData.value);
-            const signUpResponse = await response.json();
+            // const signUpResponse = await response.json();
             if(response.status === 400){
-                Object.entries(signUpResponse.errors).forEach(([key, value]) => {
+                Object.entries(response.errors).forEach(([key, value]) => {
                     if(signUpError.hasOwnProperty(key)){
                         signUpError[key] = value[0];
                     }
