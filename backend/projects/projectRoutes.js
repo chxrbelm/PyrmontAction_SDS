@@ -3,6 +3,6 @@ const router = require('express').Router();
 
 router.get('/open', projectController.openProjects);
 router.get('/closed', projectController.closedProjects);
-router.get('/:projectId', projectController.getProject);
+router.get('/:id', projectController.getProject);
 
 module.exports = router;

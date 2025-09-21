@@ -22,9 +22,9 @@ module.exports = {
     }, 
 
     async getProject(req, res) {
-        const { projectID } = req.params;
+        const { id } = req.params;
         try{
-            const project = await Project.findOne({ _id: projectID });
+            const project = await Project.findOne({ _id: id});
             res.status(200).json({project: project});
         }
         catch(error){

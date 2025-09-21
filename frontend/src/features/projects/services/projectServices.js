@@ -8,8 +8,8 @@ const projectsAPI = {
     viewOpenProjects(){
         return api.get("api/projects/open", "");
     },
-    getIndividualProjects(projectName){
-        return api.get("api/projects/" + projectName , "");
+    getIndividualProjects(id){
+        return api.get("api/projects/" + id , "");
     }
 }
 

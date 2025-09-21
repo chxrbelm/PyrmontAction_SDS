@@ -33,8 +33,8 @@
     async function fetchData(id){
 
         try{
-            const projectData = await projects.getIndividualProjects(id);
-            individualProject.value = projectData.project;
+            const { project } = await projects.getIndividualProjects(id);
+            individualProject.value = project;
 
             let listData;
             if (individualProject.value.project_type === 'open') {
