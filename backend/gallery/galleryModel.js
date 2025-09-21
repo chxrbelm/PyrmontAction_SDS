@@ -1,11 +1,11 @@
-module.exports = {
-    async getAllImages(db){
-        return new Promise((resolve, reject) => {
-          query = "SELECT * FROM images"
-          db.all(query, [], (error, result) => {
-            if (error) reject("Issues with retrieving all images: " + error);
-            resolve(result);
-          });
-        })
-      },
-}
+const mongoose = require('mongoose');
+
+const galleryImageSchema = new mongoose.Schema({
+  image_file_name: { type: String, required: true },
+  caption: { type: String },
+  alt: { type: String },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Gallery = mongoose.model('GalleryImage', galleryImageSchema);
+module.exports = Gallery;
