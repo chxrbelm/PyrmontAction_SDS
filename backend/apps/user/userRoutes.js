@@ -1,6 +1,7 @@
 const userController = require('./userController')
 const router = require('express').Router();
 const userAuth = require('./userAuthentication')
+
 router.post('/api/submitForm', function(req, res){
     userController.register(req, res, req.db);
 })

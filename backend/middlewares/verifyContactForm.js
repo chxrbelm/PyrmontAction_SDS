@@ -1,3 +1,6 @@
+// Middleware to validate contact form inputs
+// Error Array with the fields that fail will be sent back to frontend
+// Frontend will display error messages accordingly
 module.exports = {
     
     emailRegex: function(input){
@@ -18,16 +21,18 @@ module.exports = {
 
 
 
-    async inputValidateContactForm(req, res){
-        return new Promise((resolve, reject) => {
+    async inputValidation(req, res, next){
             const inputErrors = [];
             if (!module.exports.emailRegex(req.body.email)) inputErrors.push("email");
             if (!module.exports.stringedRegex(req.body.firstName)) inputErrors.push("firstName");
             if (!module.exports.stringedRegex(req.body.lastName)) inputErrors.push("lastName");
             if (!module.exports.stringedMessage(req.body.message)) inputErrors.push("message");
-            if(inputErrors.length > 0) reject(inputErrors);
-            resolve();
-        })
-        
+
+            if (inputErrors.length > 0) {
+                return res.status(400).json({ message: 'Validation failed', errors: inputErrors });
+            }
+
+            next();
+
     }
 }
