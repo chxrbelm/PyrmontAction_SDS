@@ -1,7 +1,4 @@
-const inputValidateContactForm  = require("../../middlewares/verifyContactForm")
 const contactUsForm = require('./contactModel')
-inputValidator = require("../../middlewares/verifyContactForm")
-
 
 module.exports = {
     async sendContactMail(req, res) {

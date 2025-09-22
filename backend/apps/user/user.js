@@ -10,8 +10,6 @@ module.exports = {
           resolve(hashedPassword);
         })
       });
-      
-      
     },
 
     async createUser(data, db){
