@@ -77,11 +77,12 @@
             const response = await joinUsService.joinus(signUpData.value);
             // const signUpResponse = await response.json();
             if(response.status === 400){
-                Object.entries(response.errors).forEach(([key, value]) => {
-                    if(signUpError.hasOwnProperty(key)){
-                        signUpError[key] = value[0];
-                    }
-                })
+                // Object.entries(response.errors).forEach(([key, value]) => {
+                //     if(signUpError.hasOwnProperty(key)){
+                //         signUpError[key] = value[0];
+                //     }
+                // })
+                alert("Sign up failed. Please check your details and try again.")
        
             }
             else{
@@ -91,7 +92,8 @@
 
         }
         catch(error){
-            console.err(error)
+            console.error(error)
+            console.log("error in join us form vue:", error)
         }
      
     }
