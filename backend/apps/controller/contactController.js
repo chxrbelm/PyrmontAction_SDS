@@ -1,4 +1,4 @@
-const contactUsForm = require('./contactModel')
+const contactUsForm = require('../model/contactModel')
 
 module.exports = {
     async sendContactMail(req, res) {

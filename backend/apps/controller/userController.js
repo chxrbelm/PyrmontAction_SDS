@@ -1,6 +1,6 @@
 
-const user = require('./user');
-const userAuth = require('./userAuthentication')
+const user = require('../misc/user');
+const userAuth = require('../misc/userAuthentication')
 
 module.exports = {
     async register(req, res, db) {

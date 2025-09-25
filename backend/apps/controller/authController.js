@@ -1,5 +1,5 @@
-const User = require('../user/userModel');
-const Role = require('../user/roleModel');
+const User = require('../model/userModel');
+const Role = require('../model/roleModel');
 
 module.exports = {
     async join(req, res) {

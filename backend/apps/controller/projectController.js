@@ -1,4 +1,4 @@
-const Project = require('./projectModel');
+const Project = require('../model/projectModel');
 
 module.exports = {
     async openProjects(req, res){

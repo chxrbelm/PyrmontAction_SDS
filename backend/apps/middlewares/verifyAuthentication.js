@@ -1,4 +1,4 @@
-const User = require('../apps/user/userModel');
+const User = require('../model/userModel');
 module.exports = {
 
     stateRegex : function(input){
