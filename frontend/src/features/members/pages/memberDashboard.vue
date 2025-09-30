@@ -1,53 +1,49 @@
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import memberServices  from '../services/memberServices'
-import router from '@/router';
-export default {
-  data() {
-    return {
-      memberFirstName: "",
-      memberLastName: "",
-      memberPhoneNumber: "",
-      memberPostCode: ""
+import { useUserStore } from '../../../stores/authStore';
+import memberServices from '../services/memberServices';
 
-    };
-  },
-  async created(){
-    const router = useRouter();
+// Reactive data
+const memberFirstName = ref("");
+const memberLastName = ref("");
+const memberPhoneNumber = ref("");
+const memberPostCode = ref("");
 
-    // if(!localStorage.getItem('refreshToken')){
-    //   await router.push("/login")
-    // }
-  },
-  async mounted() {
-    const router = useRouter();
+// Composables
+const router = useRouter();
+const userStore = useUserStore();
 
-    try{
-      // const accessToken = await localStorage.getItem('accessToken');
-      // const response = await memberServices.memberDisplay(accessToken);
-      // const memberData = await response.json();
-      // if(!response.ok || response.memberInfo.role_id !== 1){
-      //   await router.push("/login")
-      // }
-      // else{
-        this.memberFirstName = "member";
-        this.memberLastName = "member";
-        this.memberPhoneNumber = "member";
-        this.memberPostCode = "member";
-      // }
+// Run on component mount at startup of webpage
+onMounted(async () => {
+  try {
+    // Check authentication and load data
+    if (!userStore.isAuthenticated) {
+      console.warn('User not authenticated, redirecting to login.');
+      logout();
+      return;
     }
-    catch(error){
-      await router.push("/login")
-    }
+
+    // Use token from store for API calls
+    const response = await memberServices.getCurrentUserDetails(userStore.getToken);
+    console.log('API Response:', response); // Debug log
     
-  },
-
-  methods: {
-    logout(){
-      // localStorage.clear();
-      router.push('/login')
-    }
+    memberFirstName.value = response.firstName;
+    memberLastName.value = response.lastName;
+    memberPhoneNumber.value = response.mobilePhone;
+    memberPostCode.value = response.state;
+    
+  } catch (error) {
+    console.error('Failed to load member data:', error);
+    logout();
   }
+});
+
+// Methods
+const logout = async () => {
+  // Clear token from store
+  userStore.logout();
+  await router.push('/login');
 };
 
 </script>

@@ -25,6 +25,8 @@ userSchema.pre('save', async function (next) {
     try {
         const salt = 12;
         this.password = await bcrypt.hash(this.password, salt);
+        console.log("1", await bcrypt.hash("1", salt));
+        console.log("admin", await bcrypt.hash("admin", salt));
         next();
     } catch (error) {
         next(error);

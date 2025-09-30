@@ -1,39 +1,35 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useUserStore } from '../../../stores/authStore';
 import service from '../services/loginAuthServices'
+
     const loginInput = {
         email: '',
         password: ''
     }
     const router = useRouter();
+    const userStore = useUserStore();
     const loginErrors = ref(false);
 
     const handleSubmit = async() => {
         try{
             const response = await service.login(loginInput);
+            
+            // Set the token and role in the store
+            if (response.token && response.role) {
+                userStore.login(response.token, response.role);
+            }
+            
             if (response.role === 'admin') {
                 await router.push('/admin')
             } else if (response.role === 'member') {
                 await router.push('/member')
             }
-            // loginErrors.value = response.ok ? false : true;
-            // // const details = await response.json();
-            // localStorage.setItem('accessToken', response.token.accessToken);
-            // localStorage.setItem('refreshToken', response.token.refreshToken);
-            // localStorage.setItem('loggedIn', true);
-            // localStorage.setItem('role', response.user.role);
-
-            // if(response.user.role === 0){
-            //     await router.push('/admin')
-            // }
-            // else if(response.user.role === 1){
-            //     await router.push('/member')
-            // }
         }
         catch(error){
             console.error('Login error:', error);
-            // loginErrors.value = true;
+            loginErrors.value = true;
         }
     }
 

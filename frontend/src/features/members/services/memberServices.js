@@ -1,8 +1,8 @@
 import api from "../../../services/api"
 
 const memberServices = {    
-    memberDisplay(token){
-        return api.get("api/members", token);
+    getCurrentUserDetails(token){
+        return api.get("api/users/me", token);
     },
     
 
