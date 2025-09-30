@@ -26,7 +26,7 @@ app.use('/api/users', require('./apps/routes/userRoutes')); // Fixed path
 app.use('/api/projects', require('./apps/routes/projectRoutes')); // Fixed path
 app.use('/api/gallery', require('./apps/routes/galleryRoutes')); // Fixed path
 app.use('/api/contact', require('./apps/routes/contactRoutes')); // Fixed path
-app.use('/api/authentication', require('./apps/routes/authRoutes')); // Fixed path
+app.use('/api/auth', require('./apps/routes/authRoutes')); // Fixed path
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

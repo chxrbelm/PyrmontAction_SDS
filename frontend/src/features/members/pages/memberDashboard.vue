@@ -15,26 +15,26 @@ export default {
   async created(){
     const router = useRouter();
 
-    if(!localStorage.getItem('refreshToken')){
-      await router.push("/login")
-    }
+    // if(!localStorage.getItem('refreshToken')){
+    //   await router.push("/login")
+    // }
   },
   async mounted() {
     const router = useRouter();
 
     try{
-      const accessToken = await localStorage.getItem('accessToken');
-      const response = await memberServices.memberDisplay(accessToken);
+      // const accessToken = await localStorage.getItem('accessToken');
+      // const response = await memberServices.memberDisplay(accessToken);
       // const memberData = await response.json();
-      if(!response.ok || response.memberInfo.role_id !== 1){
-        await router.push("/login")
-      }
-      else{
-        this.memberFirstName = response.memberInfo.firstName;
-        this.memberLastName = response.memberInfo.lastName;
-        this.memberPhoneNumber = response.memberInfo.mobilePhone;
-        this.memberPostCode = response.memberInfo.state;
-      }
+      // if(!response.ok || response.memberInfo.role_id !== 1){
+      //   await router.push("/login")
+      // }
+      // else{
+        this.memberFirstName = "member";
+        this.memberLastName = "member";
+        this.memberPhoneNumber = "member";
+        this.memberPostCode = "member";
+      // }
     }
     catch(error){
       await router.push("/login")
@@ -44,7 +44,7 @@ export default {
 
   methods: {
     logout(){
-      localStorage.clear();
+      // localStorage.clear();
       router.push('/login')
     }
   }

@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import loginAuthenticationService from '../services/loginAuthServices'
+import service from '../services/loginAuthServices'
     const loginInput = {
         email: '',
         password: ''
@@ -11,23 +11,29 @@ import loginAuthenticationService from '../services/loginAuthServices'
 
     const handleSubmit = async() => {
         try{
-            const response = await loginAuthenticationService.login(loginInput);
-            loginErrors.value = response.ok ? false : true;
-            // const details = await response.json();
-            localStorage.setItem('accessToken', response.token.accessToken);
-            localStorage.setItem('refreshToken', response.token.refreshToken);
-            localStorage.setItem('loggedIn', true);
-            localStorage.setItem('role', response.user.role);
-
-            if(response.user.role === 0){
+            const response = await service.login(loginInput);
+            if (response.role === 'admin') {
                 await router.push('/admin')
-            }
-            else if(response.user.role === 1){
+            } else if (response.role === 'member') {
                 await router.push('/member')
             }
+            // loginErrors.value = response.ok ? false : true;
+            // // const details = await response.json();
+            // localStorage.setItem('accessToken', response.token.accessToken);
+            // localStorage.setItem('refreshToken', response.token.refreshToken);
+            // localStorage.setItem('loggedIn', true);
+            // localStorage.setItem('role', response.user.role);
+
+            // if(response.user.role === 0){
+            //     await router.push('/admin')
+            // }
+            // else if(response.user.role === 1){
+            //     await router.push('/member')
+            // }
         }
         catch(error){
-            loginErrors.value = true;
+            console.error('Login error:', error);
+            // loginErrors.value = true;
         }
     }
 

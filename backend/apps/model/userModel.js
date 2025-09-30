@@ -17,22 +17,25 @@ const userSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
+// Pre-save middleware to hash password
+userSchema.pre('save', async function (next) {
+    // Only hash the password if it has been modified (or is new)
+    if (!this.isModified('password')) return next();
+    
+    try {
+        const salt = 12;
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
+    }
+});
+
 // Adding static methods to the schema
 userSchema.statics.getEmailExists = async function (email) {
     const user = await this.findOne({ email });
     if (!user) return false;
     return true;
-};
-
-
-// Instance method to hash password
-userSchema.methods.hashPassword = async function () {
-    const salt = 12;
-    try {
-        this.password = await bcrypt.hash(this.password, salt); // Update the document's password field
-    } catch (error) {
-        throw new Error("Error hashing password: " + error.message);
-    }
 };
 
 module.exports = mongoose.model('User', userSchema);
