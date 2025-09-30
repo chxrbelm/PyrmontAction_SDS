@@ -1,8 +1,11 @@
 const router = require('express').Router();
-const controller = require('../controller/authController'); // Fixed path
-// const authenticator = require('../middlewares/verifyAuthentication');
+const controller = require('../controller/authController');
+const validation = require('../validations/authValidation');
 
-router.post('/join', controller.join);
-router.post('/login', controller.login);
+
+router.post('/join',
+    validation.inputValidatorJoinUs, 
+    controller.join);
+router.post('/login', validation.inputValidatorLogin, controller.login);
 
 module.exports = router;

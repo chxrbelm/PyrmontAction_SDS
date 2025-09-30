@@ -1,9 +1,9 @@
 const router = require('express').Router();
 const controller = require('../controller/contactController'); // Fixed path
-const verifyContactForm = require('../middlewares/verifyContactForm');
+const validation = require('../validations/contactFormValidation');
 
 router.post('/sendEmail', 
-    verifyContactForm.inputValidation,
+    validation.inputValidation,
     controller.sendContactMail
 );
 

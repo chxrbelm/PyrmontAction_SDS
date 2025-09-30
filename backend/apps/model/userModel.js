@@ -14,8 +14,7 @@ const userSchema = new mongoose.Schema({
     postcode: { type: String, default: '' },
     isActive: { type: Boolean, default: true },
     role: { type: mongoose.Schema.Types.ObjectId, ref: 'Role' },
-    createdAt: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 // Pre-save middleware to hash password
 userSchema.pre('save', async function (next) {

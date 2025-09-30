@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const User = require('../model/userModel');
+
 
 const verifyToken = async (req, res, next) => {
     // Get token from Authorization header
@@ -15,23 +17,19 @@ const verifyToken = async (req, res, next) => {
         
         // Additional manual checks
         const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-        
-        // Check if token is expired (redundant but explicit)
-        if (decoded.exp && decoded.exp < currentTime) {
-            return res.status(401).json({ message: 'Token has expired' });
-        }
-        
         // Check if token was issued in the future (security check)
         if (decoded.iat && decoded.iat > currentTime + 60) { // Allow 60 seconds clock skew
             return res.status(401).json({ message: 'Token issued in the future' });
         }
         
         // Add user info to request object (only what's actually in the token)
-        req.user = {
-            id: decoded.id,
-            iat: decoded.iat,
-            exp: decoded.exp
-        };
+        console.log(decoded);
+        const user = await User.findById(decoded.id);
+        if (!user) {
+            return res.status(404).json({ message: 'Not a valid user for this token' });
+        }
+
+        req.user = user;
 
         next();
     } catch (error) {
@@ -40,7 +38,7 @@ const verifyToken = async (req, res, next) => {
         } else if (error.name === 'JsonWebTokenError') {
             return res.status(403).json({ message: 'Invalid token' });
         } else {
-            return res.status(403).json({ message: 'Token verification failed' });
+            return res.status(403).json({ message: 'Token verification failed', errors: error.message });
         }
     }
 };
@@ -50,16 +48,12 @@ const verifyRole = (requiredRole) => {
         if (!req.user || !req.user.role) {
             return res.status(403).json({ message: 'Forbidden: Insufficient role' });
         }
+
         // If role is not present in token, fetch from DB or another source if needed
-        const user = await User.findById(req.user.id);
-
-        if (user && user.role) {
-            req.user.role = user.role;
-        }
-
         if (req.user.role !== requiredRole) {
             return res.status(403).json({ message: 'Forbidden: Insufficient role' });
         }
+
         next();
     };
 };
