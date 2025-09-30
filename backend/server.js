@@ -105,3 +105,8 @@ app.listen(PORT, () => {
 });
 
 
+const eventRoutes = require('./events/eventRoutes');
+const minutesRoutes = require('./minutes/meetingMinutesRoutes');
+
+app.use('/api', eventRoutes);
+app.use('/api', minutesRoutes);
