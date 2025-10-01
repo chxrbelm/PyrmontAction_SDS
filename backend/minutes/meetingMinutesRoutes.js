@@ -11,7 +11,6 @@ router.get('/minutes/:id/download', ctrl.downloadPublic);
 router.post('/admin/minutes/upload', requireAuth, requireRole('Admin'),
   upload.single('pdf'), ctrl.uploadPrivate);
 
-router.get('/admin/minutes/:id/download', requireAuth, requireRole('Admin'), ctrl.downloadPrivate);
 router.patch('/admin/minutes/:id/publish', requireAuth, requireRole('Admin'), ctrl.publish);
 router.delete('/admin/minutes/:id', requireAuth, requireRole('Admin'), ctrl.remove);
 

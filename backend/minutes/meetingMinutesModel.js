@@ -1,37 +1,12 @@
-const db = require('../db');
+const mongoose = require('mongoose');
 
-exports.createMinutes = (payload) => {
-  const stmt = db.prepare(`
-    INSERT INTO meeting_minutes (title, meeting_date, file_path, file_size, status, uploaded_by)
-    VALUES (@title, @meeting_date, @file_path, @file_size, @status, @uploaded_by)
-  `);
-  const info = stmt.run(payload);
-  return info.lastInsertRowid;
-};
+const MeetingMinutesSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  meeting_date: { type: Date, required: true },
+  file_path: { type: String, required: true },
+  file_size: { type: Number, required: true },
+  status: { type: String, enum: ['private', 'published'], default: 'private' },
+  uploaded_by: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
+}, { timestamps: true });
 
-exports.publishMinutes = (id) => {
-  const info = db.prepare(`
-    UPDATE meeting_minutes SET status='published', updated_at=datetime('now') WHERE id=@id
-  `).run({ id });
-  return info.changes > 0;
-};
-
-exports.listPublic = () => {
-  return db.prepare(`
-    SELECT id, title, meeting_date FROM meeting_minutes
-    WHERE status='published' ORDER BY meeting_date DESC
-  `).all();
-};
-
-exports.getById = (id, { includePrivate = false } = {}) => {
-  const sql = includePrivate
-    ? `SELECT * FROM meeting_minutes WHERE id=@id`
-    : `SELECT * FROM meeting_minutes WHERE id=@id AND status='published'`;
-  return db.prepare(sql).get({ id });
-};
-
-exports.remove = (id) => {
-  const row = db.prepare(`SELECT file_path FROM meeting_minutes WHERE id=@id`).get({ id });
-  const info = db.prepare(`DELETE FROM meeting_minutes WHERE id=@id`).run({ id });
-  return { removed: info.changes > 0, file_path: row?.file_path };
-};
+module.exports = mongoose.model('MeetingMinute', MeetingMinutesSchema);

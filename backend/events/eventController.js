@@ -1,49 +1,52 @@
-const events = require('./eventModel');
+const Event = require('./eventModel');
 
-exports.create = (req, res) => {
-  const { title, description, location, starts_at, ends_at, cover_image_url } = req.body;
-  if (!title || !starts_at) return res.status(400).json({ message: 'title and starts_at required' });
-
-  const status = req.user.role === 'Admin' ? 'published' : 'pending_review';
-  const result = events.createEvent({
-    title, description, location, starts_at, ends_at, cover_image_url,
-    status, created_by: req.user.id
-  });
-  res.status(201).json({ id: result.id, slug: result.slug, status });
+exports.create = async (req, res) => {
+  try {
+    const status = req.user.role === 'Admin' ? 'published' : 'pending_review';
+    const event = await Event.create({ ...req.body, status, created_by: req.user._id });
+    res.status(201).json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-exports.update = (req, res) => {
-  const ok = events.updateEvent(parseInt(req.params.id,10), req.body);
-  if (!ok) return res.status(404).json({ message: 'Not found' });
-  res.json({ message: 'Updated' });
+exports.update = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    if (!event) return res.status(404).json({ message: 'Not found' });
+    res.json(event);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-exports.publish = (req, res) => {
-  const ok = events.publishEvent(parseInt(req.params.id,10));
-  if (!ok) return res.status(404).json({ message: 'Not found' });
-  res.json({ message: 'Published' });
+exports.publish = async (req, res) => {
+  try {
+    const event = await Event.findByIdAndUpdate(req.params.id, { status: 'published' }, { new: true });
+    if (!event) return res.status(404).json({ message: 'Not found' });
+    res.json({ message: 'Published', event });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-exports.remove = (req, res) => {
-  const ok = events.deleteEvent(parseInt(req.params.id,10));
-  if (!ok) return res.status(404).json({ message: 'Not found' });
-  res.json({ message: 'Deleted' });
+exports.remove = async (req, res) => {
+  try {
+    const result = await Event.findByIdAndDelete(req.params.id);
+    if (!result) return res.status(404).json({ message: 'Not found' });
+    res.json({ message: 'Deleted' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-exports.getPublic = (_req, res) => {
-  res.json(events.listEventsPublic());
+exports.getPublic = async (_req, res) => {
+  const events = await Event.find({ status: 'published' }).sort({ starts_at: 1 });
+  res.json(events);
 };
 
-exports.getOnePublic = (req, res) => {
-  const ev = events.getEventById(parseInt(req.params.id,10), { includeUnpublished: false });
-  if (!ev) return res.status(404).json({ message: 'Not found' });
-  res.json(ev);
-};
-
-exports.listMine = (req, res) => {
-  res.json(events.listMyEvents(req.user.id));
-};
-
-exports.listAll = (_req, res) => {
-  res.json(events.listEventsAll());
+exports.getOnePublic = async (req, res) => {
+  const event = await Event.findOne({ _id: req.params.id, status: 'published' });
+  if (!event) return res.status(404).json({ message: 'Not found' });
+  res.json(event);
 };
