@@ -1,5 +1,5 @@
-const User = require('../model/userModel');
-const Role = require('../model/roleModel');
+const User = require('../models/userModel');
+const Role = require('../models/roleModel');
 const jwt = require('jsonwebtoken'); // Import JWT library
 const bcrypt = require('bcrypt');
 

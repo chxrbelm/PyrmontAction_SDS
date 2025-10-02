@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Role = require('./apps/model/roleModel'); // Fixed path
+const Role = require('./apps/models/roleModel'); // Fixed path
 require('dotenv').config();
 
 const app = express();

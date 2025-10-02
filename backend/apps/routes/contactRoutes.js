@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const controller = require('../controller/contactController'); // Fixed path
+const controller = require('../controllers/contactController'); // Fixed path
 const validation = require('../validations/contactFormValidation');
 
 router.post('/sendEmail', 

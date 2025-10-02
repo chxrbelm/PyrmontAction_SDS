@@ -1,4 +1,4 @@
-const projectController = require('../controller/projectController'); // Fixed path
+const projectController = require('../controllers/projectController'); // Fixed path
 const router = require('express').Router();
 
 router.get('/open', projectController.openProjects);

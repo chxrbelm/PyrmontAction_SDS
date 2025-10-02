@@ -1,5 +1,5 @@
 
-const User = require('../model/userModel');
+const User = require('../models/userModel');
 
 module.exports = {
     // Get current user's profile (using ID from JWT token)

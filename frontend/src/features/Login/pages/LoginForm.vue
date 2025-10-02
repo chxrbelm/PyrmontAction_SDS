@@ -24,7 +24,7 @@ import service from '../services/loginAuthServices'
             if (response.role === 'admin') {
                 await router.push('/admin')
             } else if (response.role === 'member') {
-                await router.push('/member')
+                await router.push('/dashboard/member')
             }
         }
         catch(error){
