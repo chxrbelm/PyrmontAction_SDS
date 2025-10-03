@@ -102,8 +102,8 @@ function openRenewForm() {
       <!-- Member Details -->
       <section class="details">
         <div class="details-head">
-          <h2>Member Details</h2>
-          <p class="muted">Manage your personal information</p>
+          <h2>Account Details</h2>
+          <p class="muted">Manage account information or passoword</p>
           <button class="btn-edit" @click="handleEdit">O Edit</button>
         </div>
 
@@ -122,7 +122,7 @@ function openRenewForm() {
           </div>
           <div class="field">
             <label>Address</label>
-            <div class="field-value">{{ userData?.streetAddress + ", " + userData?.city + ", " + userData?.state + ", " + userData?.postalCode }}</div>
+            <div class="field-value">{{ userData?.streetName + ", " + userData?.city + ", " + userData?.state + ", " + userData?.postcode }}</div>
           </div>
         </div>
       </section>

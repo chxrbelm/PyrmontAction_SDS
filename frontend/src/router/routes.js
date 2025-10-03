@@ -6,8 +6,6 @@ import { projectsRoutes } from '~features/projects/routes'
 import { joinusRoutes }   from '~features/JoinUs/routes'
 import { loginRoutes }     from '~features/Login/routes'
 import { accountRoutes }     from '~features/accountDashboard/routes'
-import { memberRoutes }     from '~features/members/routes'
-import { adminRoutes }     from '~features/admin/routes'
 
 export const routes = [
     ...homeRoutes,
@@ -17,7 +15,5 @@ export const routes = [
     ...projectsRoutes,
     ...joinusRoutes,
     ...loginRoutes,
-    ...memberRoutes,
-    ...adminRoutes,
     ...accountRoutes
 ]

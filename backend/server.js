@@ -36,7 +36,7 @@ app.listen(PORT, () => {
 // Seed initial roles if they don't exist
 
 async function seedRoles() {
-    const roles = ['admin', 'member', 'content'];
+    const roles = ['admin', 'member', 'editor'];
 
     for (const roleName of roles) {
         const existingRole = await Role.findOne({ name: roleName });

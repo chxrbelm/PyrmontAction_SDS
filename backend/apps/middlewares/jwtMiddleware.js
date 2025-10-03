@@ -43,14 +43,15 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
-const verifyRole = (requiredRole) => {
+const verifyRole = (requiredRoles) => {
     return async (req, res, next) => {
         if (!req.user || !req.user.role) {
             return res.status(403).json({ message: 'Forbidden: Insufficient role' });
         }
 
         // If role is not present in token, fetch from DB or another source if needed
-        if (req.user.role !== requiredRole) {
+        // requiredRoles is an array for multiple allowed roles
+        if (!requiredRoles.includes(req.user.role)) {
             return res.status(403).json({ message: 'Forbidden: Insufficient role' });
         }
 

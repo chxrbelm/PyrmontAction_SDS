@@ -22,9 +22,11 @@ import service from '../services/loginAuthServices'
             }
             
             if (response.role === 'admin') {
-                await router.push('/admin')
+                await router.push('/dashboard/admin');
             } else if (response.role === 'member') {
-                await router.push('/dashboard/member')
+                await router.push('/dashboard/member');
+            } else if (response.role === 'editor') {
+                await router.push('/dashboard/editor');
             }
         }
         catch(error){
