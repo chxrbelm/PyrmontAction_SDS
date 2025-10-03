@@ -16,9 +16,9 @@ function switchTab(tab) {
 
         <!-- Tab Buttons -->
         <div>
-            <button @click="switchTab('tab1')">Tab 1</button>
-            <button @click="switchTab('tab2')">Tab 2</button>
-            <button @click="switchTab('tab3')">Tab 3</button>
+            <button @click="switchTab('tab1')">My Account</button>
+            <button @click="switchTab('tab2')">Meeting Minutes</button>
+            <button @click="switchTab('tab3')">Account Manager</button>
         </div>
 
         <!-- Tab Content -->
