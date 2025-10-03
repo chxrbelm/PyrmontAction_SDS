@@ -18,6 +18,7 @@ router.beforeEach((to, from, next) => {
   // Routes that require authentication
   const memberRoutes = [
     'memberDashboard', // Add both variations to be safe
+    'minutesMemberView',
     // Add other protected route names here
   ];
   

@@ -1,84 +1,41 @@
-<template>
-  <div>
-    <Navigation />
-    <section class="wrap">
-      <header class="hero">
-        <h1>Welcome back!</h1>
-        <p class="hint">Signed in as <strong>Content Manager</strong></p>
-      </header>
-
-      <Subnav v-model:current="tab" :items="adminTabs" />
-
-      <div class="grid2">
-        <StatCard title="Membership">
-          <p v-if="!isPaid">Youre not a paid member yet.</p>
-          <p v-else>Active paid member  renews {{ renewalDate }}</p>
-          <template #action><a href="#">Become a member</a></template>
-        </StatCard>
-
-        <StatCard title="Upcoming event">
-          <p v-if="!nextEvent">No events scheduled.</p>
-          <p v-else>{{ nextEvent.title }}  {{ nextEvent.date }}</p>
-          <template #action><a href="#">View all events </a></template>
-        </StatCard>
-      </div>
-
-      <StatCard class="mt" title="Latest minutes">
-        <p>{{ latestMinute.title }}</p>
-        <template #action><a :href="latestMinute.pdf">PDF</a></template>
-      </StatCard>
-
-      <StatCard class="mt" title="Your role">
-        <span class="badge blue">Content Manager</span>
-      </StatCard>
-
-      <div class="mt"><component :is="currentPanel" /></div>
-    </section>
-  </div>
-</template>
-
 <script setup>
-import { ref, computed } from 'vue'
-import Navigation from '@/components/Navigation.vue'
-import Subnav from '../components/common/Subnav.vue'
-import StatCard from '../components/common/StatCard.vue'
-import MeetingMinutesAdmin from '../components/admin/MeetingMinutesAdmin.vue'
-import EditorialDashboard from '../components/admin/EditorialDashboard.vue'
-import BlogAdmin from '../components/admin/BlogAdmin.vue'
-import MemberList from '../components/admin/MemberList.vue'
+import { ref } from 'vue';
+import Tab1Content from '../components/AccountTab.vue';
 
-const tab = ref('dashboard')
-const adminTabs = [
-  { name:'dashboard', label:'Dashboard' },
-  { name:'minutes',   label:'Minutes' },
-  { name:'events',    label:'Events' },
-  { name:'editorial', label:'Editorial' },
-]
+const activeTab = ref('tab1');
 
-// mock
-const isPaid = false
-const renewalDate = '02 Nov'
-const nextEvent = null
-const latestMinute = { title:'June 2025 Community Garden Committee Meeting', pdf:'#' }
-
-const panelMap = {
-  dashboard:{ component:{ template:'<div />' } },
-  minutes:  { component: MeetingMinutesAdmin },
-  events:   { component:{ template:'<div class="placeholder">Events admin here</div>' } },
-  editorial:{ component: EditorialDashboard },
+function switchTab(tab) {
+    activeTab.value = tab;
 }
-const currentPanel = computed(() => panelMap[tab.value]?.component || { template:'<div />' })
 </script>
 
+<template>
+    <div class="admin-dashboard">
+        <h1>Admin Dashboard</h1>
+        <p>Welcome to the admin dashboard page.</p>
+
+        <!-- Tab Buttons -->
+        <div>
+            <button @click="switchTab('tab1')">Tab 1</button>
+            <button @click="switchTab('tab2')">Tab 2</button>
+            <button @click="switchTab('tab3')">Tab 3</button>
+        </div>
+
+        <!-- Tab Content -->
+        <div v-if="activeTab === 'tab1'">
+            <Tab1Content />
+        </div>
+        <div v-if="activeTab === 'tab2'">
+            <p>This is content for Tab 2.</p>
+        </div>
+        <div v-if="activeTab === 'tab3'">
+            <p>This is content for Tab 3.</p>
+        </div>
+    </div>
+</template>
+
 <style scoped>
-.wrap{ max-width:1200px; margin:0 auto; padding:28px 16px 40px; }
-.hero{ text-align:center; margin:6px 0 14px; }
-.hero h1{ font-size:36px; font-weight:800; letter-spacing:.2px; margin:0 0 6px; }
-.hint{ color:#64748b; margin:0; }
-.grid2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:8px; }
-.mt{ margin-top:18px; }
-.badge{ display:inline-block; padding:7px 12px; border-radius:999px; font-weight:700; font-size:12.5px; }
-.blue{ background:#e6f6ff; color:#075985; border:1px solid #bae6fd; }
-.placeholder{ padding:12px; border:1px dashed #d9e2ec; border-radius:12px; color:#64748b; }
-@media(max-width:900px){ .grid2{ grid-template-columns:1fr; } }
+.admin-dashboard {
+    padding: 2rem;
+}
 </style>
