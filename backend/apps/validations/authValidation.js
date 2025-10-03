@@ -61,7 +61,7 @@ module.exports = {
             errorCount++;
         } else {
             // Only check for existing email if the format is valid
-            const emailExists = await User.emailExists(req.body.email);
+            const emailExists = await User.getEmailExists(req.body.email);
             if (emailExists) {
                 errorMessages.email.push("This email address is already registered. Please use a different email.");
                 errorCount++;
