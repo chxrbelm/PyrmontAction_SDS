@@ -12,11 +12,11 @@ const router = createRouter({
 
 // Add route guards for authentication
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = !!sessionStorage.getItem('auth_token');
-  const userStore = useUserStore();
+  const isAuthenticated = useUserStore().isAuthenticated;
+  const role = useUserStore().getRole;
   
   // Routes that require authentication
-  const protectedRoutes = [
+  const memberRoutes = [
     'memberDashboard', // Add both variations to be safe
     // Add other protected route names here
   ];
@@ -26,14 +26,32 @@ router.beforeEach((to, from, next) => {
     'adminDashboard',
     // Add other admin route names here
   ];
-  
-  if (protectedRoutes.includes(to.name) && !isAuthenticated) {
+
+  const editorRoutes = [
+    'editorDashboard',
+    // Add other editor route names here
+  ];
+
+  const managerRoutes = [
+    'editorialDashboard',
+    // Add other manager route names here
+  ];
+
+  if (memberRoutes.includes(to.name) && !(isAuthenticated && role === 'member')) {
     // Redirect to login if trying to access protected route without authentication
-    userStore.logout(); // Clear any stale auth data
+    useUserStore().logout(); // Clear any stale auth data
     next({ name: 'Login' });
-  } else if (adminRoutes.includes(to.name) && (!isAuthenticated || userStore.getRole !== 'admin')) {
+  } else if (adminRoutes.includes(to.name) && !(isAuthenticated && role === 'admin')) {
     // Redirect to login if trying to access admin route without proper role
-    userStore.logout(); // Clear any stale auth data
+    useUserStore().logout(); // Clear any stale auth data
+    next({ name: 'Login' });
+  } else if (editorRoutes.includes(to.name) && !(isAuthenticated && role === 'editor')) {
+    // Redirect to login if trying to access editor route without proper role
+    useUserStore().logout(); // Clear any stale auth data
+    next({ name: 'Login' });
+  } else if (managerRoutes.includes(to.name) && !(isAuthenticated && (role === 'admin' || role === 'editor'))) {
+    // Redirect to login if trying to access manager route without proper role
+    useUserStore().logout(); // Clear any stale auth data
     next({ name: 'Login' });
   } else {
     next(); // Allow navigation

@@ -1,41 +1,45 @@
 <template>
-  <section class="wrap">
-    <header class="hero">
-      <h1>Welcome back!</h1>
-      <p class="hint">Signed in as <strong>Content Manager</strong></p>
-    </header>
+  <div>
+    <Navigation />
+    <section class="wrap">
+      <header class="hero">
+        <h1>Welcome back!</h1>
+        <p class="hint">Signed in as <strong>Content Manager</strong></p>
+      </header>
 
-    <Subnav v-model:current="tab" :items="adminTabs" />
+      <Subnav v-model:current="tab" :items="adminTabs" />
 
-    <div class="grid2">
-      <StatCard title="Membership">
-        <p v-if="!isPaid">Youre not a paid member yet.</p>
-        <p v-else>Active paid member  renews {{ renewalDate }}</p>
-        <template #action><a href="#">Become a member</a></template>
+      <div class="grid2">
+        <StatCard title="Membership">
+          <p v-if="!isPaid">Youre not a paid member yet.</p>
+          <p v-else>Active paid member  renews {{ renewalDate }}</p>
+          <template #action><a href="#">Become a member</a></template>
+        </StatCard>
+
+        <StatCard title="Upcoming event">
+          <p v-if="!nextEvent">No events scheduled.</p>
+          <p v-else>{{ nextEvent.title }}  {{ nextEvent.date }}</p>
+          <template #action><a href="#">View all events </a></template>
+        </StatCard>
+      </div>
+
+      <StatCard class="mt" title="Latest minutes">
+        <p>{{ latestMinute.title }}</p>
+        <template #action><a :href="latestMinute.pdf">PDF</a></template>
       </StatCard>
 
-      <StatCard title="Upcoming event">
-        <p v-if="!nextEvent">No events scheduled.</p>
-        <p v-else>{{ nextEvent.title }}  {{ nextEvent.date }}</p>
-        <template #action><a href="#">View all events </a></template>
+      <StatCard class="mt" title="Your role">
+        <span class="badge blue">Content Manager</span>
       </StatCard>
-    </div>
 
-    <StatCard class="mt" title="Latest minutes">
-      <p>{{ latestMinute.title }}</p>
-      <template #action><a :href="latestMinute.pdf">PDF</a></template>
-    </StatCard>
-
-    <StatCard class="mt" title="Your role">
-      <span class="badge blue">Content Manager</span>
-    </StatCard>
-
-    <div class="mt"><component :is="currentPanel" /></div>
-  </section>
+      <div class="mt"><component :is="currentPanel" /></div>
+    </section>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
+import Navigation from '@/components/Navigation.vue'
 import Subnav from '../components/common/Subnav.vue'
 import StatCard from '../components/common/StatCard.vue'
 import MeetingMinutesAdmin from '../components/admin/MeetingMinutesAdmin.vue'
