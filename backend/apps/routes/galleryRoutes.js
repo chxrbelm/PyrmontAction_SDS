@@ -1,6 +1,6 @@
-const galleryController = require('../controllers/galleryController'); // Fixed path
+const controller = require('../controllers/galleryController'); 
 const router = require('express').Router();
 
-router.get('/', galleryController.getAllGalleryImage)
+router.get('/', controller.getAllGalleryImage);
 
 module.exports = router;

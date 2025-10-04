@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const Role = require('./apps/models/roleModel'); // Fixed path
+const Role = require('./apps/models/roleModel'); 
 require('dotenv').config();
 
 const app = express();
@@ -22,11 +22,11 @@ mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true})
 
 
 // Mount route modules under /api
-app.use('/api/users', require('./apps/routes/userRoutes')); // Fixed path
-app.use('/api/projects', require('./apps/routes/projectRoutes')); // Fixed path
-app.use('/api/gallery', require('./apps/routes/galleryRoutes')); // Fixed path
-app.use('/api/contact', require('./apps/routes/contactRoutes')); // Fixed path
-app.use('/api/auth', require('./apps/routes/authRoutes')); // Fixed path
+app.use('/api/users', require('./apps/routes/userRoutes')); 
+app.use('/api/projects', require('./apps/routes/projectRoutes'));
+app.use('/api/gallery', require('./apps/routes/galleryRoutes')); 
+app.use('/api/contact', require('./apps/routes/contactRoutes')); 
+app.use('/api/auth', require('./apps/routes/authRoutes')); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
