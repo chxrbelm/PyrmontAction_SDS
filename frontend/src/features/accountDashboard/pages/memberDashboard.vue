@@ -9,22 +9,9 @@ const userStore = useUserStore();
 
 const userData = ref(null);
 
-// Define logout function in the correct scope
-// const logout = async () => {
-//   // Clear token from store
-//   userStore.logout();
-//   await router.push('/login');
-// };
-
 // Run on component mount at startup of webpage
 onMounted(async () => {
   try {
-    // Check authentication and load data
-    // if (!userStore.isAuthenticated) {
-    //   console.warn('User not authenticated, redirecting to login.');
-    //   logout();
-    //   return;
-    // }
 
     // Use token from store for API calls
     const response = await services.getCurrentUserDetails(userStore.getToken);
