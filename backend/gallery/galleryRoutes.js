@@ -1,12 +1,14 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const ctrl = require('./galleryController');
-const { requireAuth, requireRole } = require('../middleware/roles');
+const verifyToken = require('../middleware/auth');
+const { requireRole } = require('../middleware/roles');
 
 // Public
-router.get('/gallery', ctrl.getImages);
+router.get('/', ctrl.getGallery);
 
-// Admin
-router.post('/admin/gallery', requireAuth, requireRole('Admin'), ctrl.addImage);
-router.delete('/admin/gallery/:id', requireAuth, requireRole('Admin'), ctrl.deleteImage);
+// Protected
+router.post('/', verifyToken, requireRole('Admin', 'ContentManager'), ctrl.addImage);
+router.delete('/:id', verifyToken, requireRole('Admin'), ctrl.deleteImage);
 
 module.exports = router;

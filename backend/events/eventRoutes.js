@@ -1,15 +1,15 @@
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const ctrl = require('./eventController');
-const { requireAuth, requireRole } = require('../middleware/roles');
+const verifyToken = require('../middleware/auth');
+const { requireRole } = require('../middleware/roles');
 
 // Public
-router.get('/events', ctrl.getPublic);
-router.get('/events/:id', ctrl.getOnePublic);
+router.get('/', ctrl.getPublishedEvents);
 
-// CMS/Admin
-router.post('/cms/events', requireAuth, requireRole('ContentManager','Admin'), ctrl.create);
-router.put('/cms/events/:id', requireAuth, requireRole('ContentManager','Admin'), ctrl.update);
-router.patch('/cms/events/:id/publish', requireAuth, requireRole('Admin'), ctrl.publish);
-router.delete('/cms/events/:id', requireAuth, requireRole('Admin'), ctrl.remove);
+// Protected
+router.post('/', verifyToken, requireRole('Admin', 'ContentManager'), ctrl.createEvent);
+router.put('/:id', verifyToken, requireRole('Admin', 'ContentManager'), ctrl.updateEvent);
+router.delete('/:id', verifyToken, requireRole('Admin'), ctrl.deleteEvent);
 
 module.exports = router;
